@@ -2,13 +2,11 @@ package com.example.divine.bdd.api.steps;
 
 import com.example.divine.bdd.api.utils.StudentRepo;
 import com.example.divine.bdd.api.utils.TestStudentCommonUtils;
-import com.example.divine.contoller.StudentController;
-import com.example.divine.dao.StudentDao;
+import com.example.divine.contoller.StudentApiController;
 import com.example.divine.model.Student;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
@@ -35,7 +33,7 @@ public class StudentSteps {
 
     @Given("I am on the students endpoint")
     public void i_am_on_the_students_endpoint() {
-        request.setBasePath(StudentController.STUDENT_PATH);
+        request.setBasePath(StudentApiController.STUDENT_PATH);
     }
 
     @Given("I have a valid student")
@@ -103,6 +101,7 @@ public class StudentSteps {
     public void i_should_see_that_the_student_first_name_is(String firstname) {
         student = given().log().all().spec(request.build()).get("1")
                 .andReturn().as(Student.class);
+
         assertEquals(student.getFirstName(), firstname);
     }
 

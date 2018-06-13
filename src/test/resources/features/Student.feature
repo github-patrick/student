@@ -17,11 +17,15 @@ Feature: A client can perform crud operations on a student resource.
     And I send a request to create the student
     Then I should see a 400 response
 
-  Scenario: A client does a update on a student
+  Scenario Outline: A client does a update on a student
     And I have created 2 students
     And I have a student to update
     When I set the header "Content-Type" as "application/json"
-    And I set the student first name to "Paul"
+    And I set the student first name to "<name>"
     And I send a request to update the student
     Then I should see a 200 response
-    And I should see that the student first name is "Paul"
+    And I should see that the student first name is "<name>"
+    Examples:
+      | name |
+      | Paul |
+      | Jake |

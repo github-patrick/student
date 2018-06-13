@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,10 @@ public class StudentServiceTest {
         MockitoAnnotations.initMocks(this);
         studentService = new StudentService(studentDao);
         students = new ArrayList();
-        students.add(new Student(new Long(1), "patrick", "ugwu", "Mathematics", 31));
+
+        Student student = Student.builder().firstName("Patrick").surname("Ugwu").course("Mathematics").age(31)
+                .createdDate(LocalDateTime.now()).updatedDate(LocalDateTime.now()).build();
+        students.add(student);
         students.add(new Student());
         students.add(new Student());
     }

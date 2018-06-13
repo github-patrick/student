@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,11 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StudentControllerTest {
+public class StudentApiControllerTest {
 
     private MockMvc mockMvc;
 
-    private StudentController studentController;
+    private StudentApiController studentApiController;
 
     @Mock
     private StudentService studentService;
@@ -39,9 +37,9 @@ public class StudentControllerTest {
 
     @Before
     public void setUp() {
-        studentController = new StudentController(studentService);
+        studentApiController = new StudentApiController(studentService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(studentController)
+        mockMvc = MockMvcBuilders.standaloneSetup(studentApiController)
                 .setControllerAdvice(new CustomizedResponseEntityExceptionHandler())
                 .build();
 
@@ -54,7 +52,7 @@ public class StudentControllerTest {
 
     @Test
     public void addStudent() throws Exception {
-        mockMvc.perform(post(StudentController.STUDENT_PATH)
+        mockMvc.perform(post(StudentApiController.STUDENT_PATH)
         .contentType(MediaType.APPLICATION_JSON)
         .content(new ObjectMapper().writeValueAsString(student)))
                 .andDo(print())
@@ -69,7 +67,7 @@ public class StudentControllerTest {
 
     @Test
     public void getAllStudents() throws Exception {
-        mockMvc.perform(get(StudentController.STUDENT_PATH)
+        mockMvc.perform(get(StudentApiController.STUDENT_PATH)
         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -78,14 +76,14 @@ public class StudentControllerTest {
     public void getStudent() throws Exception {
         when(studentService.getStudent(new Long(1))).thenReturn(new Student());
 
-        mockMvc.perform(get(StudentController.STUDENT_PATH + "/1")
+        mockMvc.perform(get(StudentApiController.STUDENT_PATH + "/1")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
     }
 
     @Test
     public void getStudentDoesNotExist() throws Exception {
-        mockMvc.perform(get(StudentController.STUDENT_PATH + "/2")
+        mockMvc.perform(get(StudentApiController.STUDENT_PATH + "/2")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("student with id 2 does not exist"));
@@ -94,7 +92,7 @@ public class StudentControllerTest {
     @Test
     public void deleteStudent() throws Exception {
         when(studentService.getStudent(new Long(1))).thenReturn(new Student());
-        mockMvc.perform(delete(StudentController.STUDENT_PATH + "/1"))
+        mockMvc.perform(delete(StudentApiController.STUDENT_PATH + "/1"))
                 .andExpect(status().isOk());
     }
 
@@ -102,7 +100,7 @@ public class StudentControllerTest {
     public void deleteStudentDoesNotExist() throws Exception {
         when(studentService.getStudent(new Long(132))).thenReturn(null);
 
-        mockMvc.perform(delete(StudentController.STUDENT_PATH + "/132" ))
+        mockMvc.perform(delete(StudentApiController.STUDENT_PATH + "/132" ))
                 .andExpect(status().isNotFound());
     }
 
@@ -110,7 +108,7 @@ public class StudentControllerTest {
     public void updateStudent() throws Exception {
         when(studentService.getStudent(new Long(1))).thenReturn(Student.builder().studentNum(new Long(1)).build());
 
-        mockMvc.perform(put(StudentController.STUDENT_PATH + "/1")
+        mockMvc.perform(put(StudentApiController.STUDENT_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(student)))
                 .andDo(print())
@@ -121,7 +119,7 @@ public class StudentControllerTest {
     public void updateStudentThatDoesNotExist() throws Exception {
         when(studentService.getStudent(new Long(1))).thenReturn(null);
 
-        mockMvc.perform(put(StudentController.STUDENT_PATH + "/1")
+        mockMvc.perform(put(StudentApiController.STUDENT_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(student)))
                 .andExpect(status().isNotFound());
@@ -134,7 +132,7 @@ public class StudentControllerTest {
         when(studentService.getStudent(new Long(1))).thenReturn(student);
 
         this.student.setStudentNum((long) 1);
-        mockMvc.perform(put(StudentController.STUDENT_PATH + "/1")
+        mockMvc.perform(put(StudentApiController.STUDENT_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(this.student)))
                 .andExpect(status().isBadRequest());
@@ -144,7 +142,7 @@ public class StudentControllerTest {
     public void patchStudent() throws Exception {
         when(studentService.getStudent(new Long(1))).thenReturn(Student.builder().studentNum(new Long(1)).build());
 
-        mockMvc.perform(patch(StudentController.STUDENT_PATH + "/1")
+        mockMvc.perform(patch(StudentApiController.STUDENT_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(student)))
                 .andExpect(status().isNoContent());

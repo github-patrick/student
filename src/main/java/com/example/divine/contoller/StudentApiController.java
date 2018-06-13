@@ -15,15 +15,15 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(StudentController.STUDENT_PATH)
-public class StudentController {
+@RequestMapping(StudentApiController.STUDENT_PATH)
+public class StudentApiController {
 
     public static final String STUDENT_PATH = "/students";
 
     private final StudentService studentService;
 
     @Autowired
-    public StudentController(StudentService studentService) {
+    public StudentApiController(StudentService studentService) {
         this.studentService = studentService;
     }
 
@@ -66,9 +66,9 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        BeanUtils.copyProperties(studentInfo, student);
+        BeanUtils.copyProperties(studentInfo, student, "createdDate");
         studentService.updateStudent(student);
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        return new ResponseEntity<>(studentService.getStudent(id), HttpStatus.OK);
     }
 
     @PatchMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,15 +1,19 @@
 package com.example.divine.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Data
 @ToString
@@ -18,7 +22,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Entity
 public class Student {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,5 +43,12 @@ public class Student {
     @Max(value = 90, message = "student must be 90 or below")
     private int age;
 
+    @Column(name= "createdAt", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+
+    @Column(name= "updatedAt")
+    @UpdateTimestamp
+    private LocalDateTime updatedDate;
 
 }
