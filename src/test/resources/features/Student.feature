@@ -19,8 +19,9 @@ Feature: A client can perform crud operations on a student resource.
 
   Scenario Outline: A client does a update on a student
     And I have created 2 students
-    And I have a student to update
     When I set the header "Content-Type" as "application/json"
+    And I set the header "Accept" as "application/json"
+    And I have a student to update
     And I set the student first name to "<name>"
     And I send a request to update the student
     Then I should see a 200 response

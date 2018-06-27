@@ -56,7 +56,7 @@ public class StudentApiController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateStudent(@Valid @RequestBody Student studentInfo, @PathVariable Long id) {
         Student student = studentService.getStudent(id);
         if (student == null) {
@@ -71,7 +71,7 @@ public class StudentApiController {
         return new ResponseEntity<>(studentService.getStudent(id), HttpStatus.OK);
     }
 
-    @PatchMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity patchStudent(@RequestBody Student studentInfo, @PathVariable Long id) {
         Student student = studentService.getStudent(id);
         if (student == null) {
