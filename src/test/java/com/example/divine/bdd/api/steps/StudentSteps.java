@@ -7,16 +7,24 @@ import com.example.divine.model.Student;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.restassured.RestAssured;
+import io.restassured.authentication.AuthenticationScheme;
+import io.restassured.authentication.BasicAuthScheme;
+import io.restassured.authentication.PreemptiveBasicAuthScheme;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
+import io.restassured.internal.http.HTTPBuilder;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
 import static org.junit.Assert.assertEquals;
 
 public class StudentSteps {
@@ -27,6 +35,8 @@ public class StudentSteps {
 
     @Autowired
     private RequestSpecBuilder request;
+
+    private RequestSpecification specification;
 
     @Autowired
     private StudentRepo studentRepo;
@@ -58,9 +68,21 @@ public class StudentSteps {
         }
     }
 
+    @Given("I have been authenticated")
+    public void i_have_been_authenticated() {
+
+        PreemptiveBasicAuthScheme preemptiveBasicAuthScheme = new PreemptiveBasicAuthScheme();
+        preemptiveBasicAuthScheme.setUserName("user");
+        preemptiveBasicAuthScheme.setPassword("password");
+        request.setAuth(preemptiveBasicAuthScheme);
+
+        specification = request.build();
+
+    }
+
     @Given("I have a student to update")
     public void i_have_a_student_to_update() {
-        student = given().log().all().spec(request.build()).get("1")
+        student = given().log().all().spec(specification).get("1")
                 .andReturn().as(Student.class);
     }
 
@@ -68,14 +90,14 @@ public class StudentSteps {
     public void i_send_a_request_to_create_the_student() {
         request.setBody(student);
         request.log(LogDetail.ALL);
-        response = given().spec(request.build()).post();
+        response = given().spec(specification).post();
     }
 
     @When("I send a request to update the student")
     public void i_send_a_request_to_update_the_student() {
         request.setBody(student);
         request.log(LogDetail.ALL);
-        response = given().spec(request.build()).put(String.valueOf(student.getStudentNum()));
+        response = given().spec(specification).put(String.valueOf(student.getStudentNum()));
     }
 
     @When("I set the student first name to {string}")
@@ -85,7 +107,8 @@ public class StudentSteps {
 
     @Then("I should see a {int} response")
     public void i_should_see_a_response(Integer statusCode) {
-        response.then().statusCode(statusCode).log().all();
+        response.then().log().all();
+        response.then().statusCode(statusCode);
     }
 
     @Then("I should see the student exists")
@@ -99,7 +122,7 @@ public class StudentSteps {
 
     @Then("I should see that the student first name is {string}")
     public void i_should_see_that_the_student_first_name_is(String firstname) {
-        student = given().log().all().spec(request.build()).get("1")
+        student = given().log().all().spec(specification).get("1")
                 .andReturn().as(Student.class);
 
         assertEquals(student.getFirstName(), firstname);
