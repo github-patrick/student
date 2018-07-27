@@ -128,6 +128,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.13.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -160,6 +166,31 @@
                                 <ports>
                                     <port>8080:8080</port>
                                 </ports>
+                                <links>
+                                    <link>mysqldb</link>
+                                </links>
+                                <env>
+                                    <SPRING_DATASOURCE_URL>jdbc:mysql://mysqldb:3306/universitydb</SPRING_DATASOURCE_URL>
+                                </env>
+                                <dependsOn>
+                                    <container>mysql</container>
+                                </dependsOn>
+                            </run>
+                        </image>
+                        <image>
+                            <name>mysql</name>
+                            <alias>mysqldb</alias>
+                            <run>
+                                <ports>
+                                    <port>3306:3306</port>
+                                </ports>
+                                <env>
+                                    <MYSQL_DATABASE>universitydb</MYSQL_DATABASE>
+                                    <MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+                                </env>
+                                <wait>
+                                    <time>10000</time>
+                                </wait>
                             </run>
                         </image>
                     </images>
@@ -245,6 +276,32 @@
                                         <ports>
                                             <port>8080:8080</port>
                                         </ports>
+                                        <links>
+                                            <link>mysqldb</link>
+                                        </links>
+                                        <env>
+                                            <SPRING_DATASOURCE_URL>jdbc:mysql://mysqldb:3306/universitydb</SPRING_DATASOURCE_URL>
+                                        </env>
+                                        <dependsOn>
+                                            <container>mysql</container>
+                                        </dependsOn>
+                                    </run>
+                                </image>
+                                <image>
+                                    <name>mysql</name>
+                                    <alias>mysqldb</alias>
+                                    <run>
+                                        <ports>
+                                            <port>3306:3306</port>
+                                        </ports>
+
+                                        <env>
+                                            <MYSQL_DATABASE>universitydb_test</MYSQL_DATABASE>
+                                            <MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+                                        </env>
+                                        <wait>
+                                            <time>10000</time>
+                                        </wait>
                                     </run>
                                 </image>
                             </images>
