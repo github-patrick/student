@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -15,6 +16,8 @@ import java.util.List;
 public class StudentController {
 
     public static final String RESOURCE_PATH = "/students";
+    private List<String> coursesList =Arrays.asList("Computer Science", "Maths", "Art", "Physics", "Chemistry", "Biology",
+            "Anthropology", "Archaeology", "Economics", "French", "Italian", "Medicine", "Sports Science", "Sociology");
 
     @Autowired
     public StudentController(StudentService studentService) {
@@ -34,6 +37,7 @@ public class StudentController {
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newStudentForm(Model model) {
+        model.addAttribute("courseList", coursesList );
         model.addAttribute("student", new Student());
         return "new";
     }
@@ -47,6 +51,7 @@ public class StudentController {
 
     @RequestMapping(value="{id}/show", method = RequestMethod.GET)
     public String showStudent(@PathVariable Long id, Model model) {
+        model.addAttribute("courseList", coursesList );
         model.addAttribute("student", studentService.getStudent(id));
         return "show";
     }

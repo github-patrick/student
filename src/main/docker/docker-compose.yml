@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+
+ mysql:
+  image: mysql:latest
+  container_name: mysqldb
+
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_DATABASE: universitydb
+
+  ports:
+    - 3306:3306
+
+ divine-spring-boot-webapp:
+  image: divinespring/springbootdocker
+  container_name: spring-divine
+
+  depends_on:
+    - mysql
+
+  ports:
+    - 8080:8080
+
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/universitydb
+
+
+
+

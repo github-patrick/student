@@ -1,40 +1,33 @@
 package com.example.divine.ui.tests;
 
 
+import com.example.divine.ui.BaseTestUI;
 import com.example.divine.ui.pages.LoginPage;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class LoginTestUI {
+public class LoginTestUI extends BaseTestUI {
 
-    private WebDriver driver;
     private LoginPage loginPage;
+    private static final String LOGIN_PATH = "/login";
 
     @Before
-    public void setUp() {
-
-        driver = new ChromeDriver();
+    public void setUpLoginTest() {
         loginPage = new LoginPage(driver);
+        driver.get(baseUrl + LOGIN_PATH);
     }
 
     @Test
-    @Ignore
-    public void shouldLoginValidUser() throws Exception {
-        driver.get("http://localhost:8080/login");
+    public void shouldLoginValidUser() {
 
         loginPage.enterTextForUsername("user");
         loginPage.enterTextForPassword("password");
         loginPage.clickOnSubmitButton();
-    }
 
-    @After
-    public void tearDown() {
-        driver.close();
+        assertEquals("http://localhost:8081", driver.getCurrentUrl());
     }
 
 
