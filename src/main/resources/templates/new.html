@@ -18,11 +18,11 @@
 
             <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter first name">
+                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter first name" required>
             </div>
             <div class="form-group">
                 <label for="surname">Surname</label>
-                <input type="text" class="form-control" id="surname" th:field="*{surname}" placeholder="Enter surname">
+                <input type="text" class="form-control" id="surname" th:field="*{surname}" placeholder="Enter surname" required>
             </div>
             <div class="form-group">
                 <label for="course">Course</label>
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label for="age">Age</label>
-                <input type="text" class="form-control" id="age" th:field="*{age}" placeholder="Enter age">
+                <input type="text" class="form-control" id="age" th:field="*{age}" placeholder="Enter age" required>
             </div>
 
             <p><button type="submit" class="btn btn-success"/>Submit</p>
